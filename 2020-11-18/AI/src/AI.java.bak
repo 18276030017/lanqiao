@@ -1,0 +1,143 @@
+import javax.microedition.lcdui.*;
+import javax.microedition.midlet.*;
+import java.io.*;
+
+public class AI extends MIDlet
+{
+	Display display;
+	MainCanvas mc;
+	public AI(){
+		display=Display.getDisplay(this);
+		mc=new MainCanvas();
+		display.setCurrent(mc);
+	}
+	public void startApp(){
+	}
+	public void destroyApp(boolean unc){
+	}
+	public void pauseApp(){
+	}
+}
+class MainCanvas extends Canvas
+{
+int leftFlag,rightFlag,upFlag,downFlag;
+int herox,heroy;//定义hero的坐标（整型）
+
+Image leftImg,rightImg,upImg,downImg;
+Image leftImg1,rightImg1,upImg1,downImg1;//1为摆右手
+Image leftImg2,rightImg2,upImg2,downImg2;//2为摆左手
+
+Image currentImg;
+public MainCanvas(){
+    try 
+    {
+    downImg=Image.createImage("/sayo10.png");
+    leftImg=Image.createImage("/sayo12.png");
+    upImg=Image.createImage("/sayo14.png");
+    rightImg=Image.createImage("/sayo16.png");
+
+    downImg1=Image.createImage("/sayo00.png");
+    leftImg1=Image.createImage("/sayo02.png");
+    upImg1=Image.createImage("/sayo04.png");
+    rightImg1=Image.createImage("/sayo06.png");
+
+    downImg2=Image.createImage("/sayo20.png");
+    leftImg2=Image.createImage("/sayo22.png");
+    upImg2=Image.createImage("/sayo24.png");
+    rightImg2=Image.createImage("/sayo26.png");
+
+    currentImg=downImg;//最开始输入向下的图片
+
+	herox=120;
+	heroy=100;
+
+    leftFlag=1;
+    rightFlag=1;
+    upFlag=1;
+    downFlag=1;
+
+    }
+    catch (IOException e)
+	{
+	e.printStackTrace();
+	}
+}
+
+public void paint(Graphics g){
+	g.setColor(200,250,0);//填充屏幕背景颜色
+	g.fillRect(0,0,getWidth(),getHeight());
+    g.drawImage(currentImg,herox,heroy,0);
+}
+public void keyPressed(int keyCode){
+	int action=getGameAction(keyCode);
+    
+	if(action==LEFT){
+        if(leftFlag==1){
+		currentImg=leftImg1;
+        leftFlag++;
+        }
+        else if(leftFlag==2){
+            currentImg=leftImg2;
+            leftFlag++;
+        }
+        else if(leftFlag==3){
+            currentImg=leftImg;
+            leftFlag=2;
+        }
+        if(herox>0)
+		{herox=herox-2;}
+		}
+        
+	if(action==RIGHT){
+		if(rightFlag==1){
+		currentImg=rightImg1;
+        rightFlag++;
+        }
+        else if(rightFlag==2){
+            currentImg=rightImg2;
+            rightFlag++;
+        }
+        else if(rightFlag==3){
+            currentImg=rightImg;
+            rightFlag=2;
+        }
+        if(herox<getWidth()-20)
+		{herox=herox+2;}
+		}
+        
+	if(action==UP){
+		if(upFlag==1){
+		currentImg=upImg1;
+        upFlag++;
+        }
+        else if(upFlag==2){
+            currentImg=upImg2;
+            upFlag++;
+        }
+        else if(upFlag==3){
+            currentImg=upImg;
+            upFlag=2;
+        }
+		if(heroy>0)
+		{heroy=heroy-2;}
+		}
+
+	if(action==DOWN){
+    	if(downFlag==1){
+		currentImg=downImg1;
+        downFlag++;
+        }
+        else if(downFlag==2){
+            currentImg=downImg;
+            downFlag++;
+        }
+        else if(downFlag==3){
+            currentImg=downImg2;
+            downFlag=2;
+        }
+		if(heroy<getWidth()+30)
+		{heroy=heroy+2;}
+		}
+    repaint();
+}
+}
